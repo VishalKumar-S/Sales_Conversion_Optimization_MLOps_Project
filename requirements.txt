@@ -5,3 +5,4 @@ zenml
 h2o
 evidently
 streamlit
+zenml[server]

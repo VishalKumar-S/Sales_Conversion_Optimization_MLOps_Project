@@ -1,7 +1,7 @@
 scikit-learn
 numpy
 pandas
-zenml==0.35.1
+zenml==0.52.0
 h2o
 evidently
 streamlit

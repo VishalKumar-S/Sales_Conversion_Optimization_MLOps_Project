@@ -12,7 +12,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.8'
 
     - name: Install dependencies
       run: |
@@ -21,4 +21,3 @@ jobs:
 
     - name: Run CI/CD script
       run: python run_ci_cd.py
-  

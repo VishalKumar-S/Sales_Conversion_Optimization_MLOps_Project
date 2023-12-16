@@ -156,5 +156,5 @@ websocket-client==1.7.0
 websockets==12.0
 widgetsnbextension==4.0.9
 yarl==1.9.4
-zenml==0.50.0
+zenml
 zipp==3.17.0

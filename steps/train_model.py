@@ -47,9 +47,9 @@ def model_performance_validation(train_df : pd.DataFrame, test_df : pd.DataFrame
     failed_tests =test_suite.as_dict()['summary']['failed_tests']
     total_tests= test_suite.as_dict()['summary']['total_tests']
     logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
-    if(threshold< 0.65):
+    if(threshold < 0.65):
         test_suite.save_html("Reports/model_performance_suite.html")
-        email_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Reports/model_performance_suite.html")
+        email_report(passed_tests, failed_tests, total_tests, test_name, "Reports/model_performance_suite.html")
     else:
         logging.info(f"All Model Performance checks passed")
 

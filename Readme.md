@@ -4,13 +4,14 @@
 
 1. [Project Description](#project-description) 📝
 2. [Project Structure](#project-structure) 🏗️
-3. [Train Pipeline](#train-pipeline) 🚂
-4. [Continuous Integration Pipeline](#continuous-integration-pipeline) 🔁
-5. [Email Report](#email-report) 📧
-6. [Prediction App](#prediction-app) 🎯
-7. [Neptune Integration](#neptune-integration) 🌊
-8. [Necessary Installations](#necessary-installations) ⚙️
-9. [Running the Project](#running-the-project) 🚀
+3. [Necessary Installations](#necessary-installations) 🛠️
+4. [Train Pipeline](#train-pipeline) 🚂
+5. [Continuous Integration Pipeline](#continuous-integration-pipeline) 🔁
+6. [Email Report](#email-report) 📧
+7. [Prediction App](#prediction-app) 🎯
+8. [Docker Configuration](#docker-configuration) 🐳
+9. [GitHub Actions](#github-actions) 🛠️
+10. [Running the Project](#running-the-project) 🚀
 
 
 # Project Description 🚀
@@ -184,7 +185,7 @@ Docker is an essential tool for packaging and distributing applications. Here's 
     docker run -p 8501:8501 my-streamlit-app
     ```
 
-3. **Best Practices:** Consider best practices such as data volume management, security, and image optimization.
+**Best Practices:** Consider best practices such as data volume management, security, and image optimization.
 
 ## GitHub Actions 🛠️
 
@@ -198,9 +199,9 @@ Follow these steps to run different components of the project:
 
 1. **Training Pipeline**:
    - To initiate the training pipeline, execute 
-        ```bash
+   ```bash
     python run_pipeline.py
-        ```
+    ```
 
 2. **Continuous Integration Pipeline**:
    - To execute the CI/CD pipeline for continuous integration, run

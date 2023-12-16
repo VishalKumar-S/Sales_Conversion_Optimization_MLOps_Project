@@ -19,5 +19,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Set up CML
+      uses: iterative/setup-cml@v2
+
     - name: Run CI/CD script
       run: python run_ci_cd.py
+
+    - name: CML Report
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo '## CML Report' > report.md
+        echo 'Here are the results of the run:' >> report.md
+        cml publish CML_Reports/predictions_scatter_plot.png --md >> report.md
+        cml publish CML_Reports/residuals_plot.png --md >> report.md
+        cml comment create --publish report.md

@@ -6,4 +6,6 @@ h2o
 evidently
 streamlit
 neptune
+matplotlib==3.4.3
+
 

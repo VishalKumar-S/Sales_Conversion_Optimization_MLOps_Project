@@ -19,9 +19,10 @@ jobs:
       - name: Set up CML
         uses: iterative/setup-cml@v2
 
-      - name: Run CI/CD script with Secret
+      - name: Run CI/CD script with Secrets
         env:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}  # Accessing the secret
+          API_TOKEN: ${{ secrets.API_TOKEN }}  # Accessing the API token secret
         run: python run_ci_cd.py
 
       - name: CML Report

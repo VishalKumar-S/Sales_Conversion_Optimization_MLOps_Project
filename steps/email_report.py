@@ -5,14 +5,18 @@ from email.mime.base import MIMEBase
 from email import encoders
 import smtplib
 import logging
-
+import os  
 
 @step(enable_cache= False)
 def email_report(passed_tests, failed_tests, total_tests, test_name, path):
     # Email details
     sender = "mlopsproject612@gmail.com"
     receiver = "vishalkumar.s2022ai-ds@sece.ac.in"
-    password = "iazb gjjc fpwc stpv"
+    # Retrieve password from environment variable
+    password = os.environ.get('EMAIL_PASSWORD')
+    print("Retrieved email password:", password)  
+    # Accessing environment variable
+    #password = "iazb gjjc fpwc stpv"
     subject = "Threshold Condition Failed"
 
     # Setup the MIME

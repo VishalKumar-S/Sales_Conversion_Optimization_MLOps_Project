@@ -27,7 +27,7 @@ def clean_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
         raise e
 
 @step(enable_cache=False)
-def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame):
+def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame)-> Tuple[pd.DataFrame, pd.DataFrame]:
     test_suite = TestSuite(tests=[DataDriftTestPreset(),])
     test_suite.run(reference_data=reference_dataset, current_data=current_dataset)
     threshold = test_suite.as_dict()['summary']['success_tests']/test_suite.as_dict()['summary']['total_tests']
@@ -41,6 +41,7 @@ def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.D
         email_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Reports/data_drift_suite.html")
     else:
         logging.info(f"All Data Drift checks passed")
+        return reference_dataset, current_dataset
         
 
 

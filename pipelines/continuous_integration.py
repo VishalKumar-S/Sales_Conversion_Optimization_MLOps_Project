@@ -19,9 +19,9 @@ def continuous_integration(path: str):
     #### FOR CURRENT (PRODUCTION) DATASET ####
 
     batch_data = production_batch_data(path)
-    data_quality_validation(batch_data)
-    cleaned_data_curr, train_X, test_X = clean_data(batch_data)
-    data_drift_validation(cleaned_data_ref, cleaned_data_curr)
+    data_quality_validated_data = data_quality_validation(batch_data)
+    cleaned_data_curr, train_X, test_X = clean_data(data_quality_validated_data)
+    cleaned_data_ref, cleaned_data_curr = data_drift_validation(cleaned_data_ref, cleaned_data_curr)
     predicted_ref_data, predicted_curr_data = predict_prod_data(cleaned_data_ref,cleaned_data_curr )
     model_performance_validation(predicted_ref_data, predicted_curr_data)
 

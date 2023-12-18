@@ -9,8 +9,8 @@ from steps.email_report import email_report
 @pipeline(enable_cache=False)
 def train_pipeline(url: str):
     df = ingest_data(url)
-    data_quality_validation(df)
+    data_quality_validated_dataset = data_quality_validation(df)
     cleaned_data,reference_dataset, current_dataset = clean_data(df)
-    data_drift_validation(reference_dataset, current_dataset)
+    reference_dataset, current_dataset = data_drift_validation(reference_dataset, current_dataset)
     train_df, test_df= train_model(cleaned_data)
     model_performance_validation(train_df, test_df)

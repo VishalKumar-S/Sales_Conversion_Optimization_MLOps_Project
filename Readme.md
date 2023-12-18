@@ -132,7 +132,10 @@ Here's how it flows:
 
 This pipeline is crucial for maintaining a continuous and reliable deployment process. 🔁✨
 
-![Continuous Integration Pipeline](assets/continuous_integraion_pipeline_Zenml_dashboard.PNG)
+![Continuous Integration Pipeline Part-1](assets/18-12-ci-cd(1).PNG)
+![Continuous Integration Pipeline Part-2](assets/18-12-ci-cd(2).PNG)
+
+
 
 ## Email Reports 📧
 
@@ -165,6 +168,7 @@ To run the streamlit application,
     ```bash
     streamlit run app.py
     ```
+![Streamlit Prediction App](assets/streamlit-prediction-app.PNG)
 
 ### Functionality:
 - **Streamlit Application**: Utilizes Streamlit to create a user-friendly interface.

@@ -56,7 +56,7 @@ def ingest_data(url:str):
     
 
 @step(enable_cache=False)
-def data_quality_validation(curr_data: pd.DataFrame):
+def data_quality_validation(curr_data: pd.DataFrame)->pd.DataFrame:
     test_suite = TestSuite(tests=[DataQualityTestPreset(),])
     test_suite.run(reference_data=None, current_data=curr_data)
     threshold = test_suite.as_dict()['summary']['success_tests']/test_suite.as_dict()['summary']['total_tests']
@@ -65,11 +65,12 @@ def data_quality_validation(curr_data: pd.DataFrame):
     failed_tests =test_suite.as_dict()['summary']['failed_tests']
     total_tests= test_suite.as_dict()['summary']['total_tests']
     logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
-    if(threshold<0.85):
+    if(threshold>0.85):
         test_suite.save_html("Reports/data_quality_suite.html")
         email_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Reports/data_quality_suite.html")
     else:
         logging.info(f"All Data Quality checks passed")
+        return curr_data
         
         
 

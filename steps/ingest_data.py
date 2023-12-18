@@ -65,7 +65,7 @@ def data_quality_validation(curr_data: pd.DataFrame)->pd.DataFrame:
     failed_tests =test_suite.as_dict()['summary']['failed_tests']
     total_tests= test_suite.as_dict()['summary']['total_tests']
     logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
-    if(threshold>0.85):
+    if(threshold<0.85):
         test_suite.save_html("Reports/data_quality_suite.html")
         email_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Reports/data_quality_suite.html")
     else:

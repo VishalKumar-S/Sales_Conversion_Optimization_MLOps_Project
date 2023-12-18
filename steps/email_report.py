@@ -13,8 +13,7 @@ def email_report(passed_tests, failed_tests, total_tests, test_name, path):
     sender = "mlopsproject612@gmail.com"
     receiver = "vishalkumar.s2022ai-ds@sece.ac.in"
     # Retrieve password from environment variable
-    password = os.environ.get('EMAIL_PASSWORD')
-    print("Retrieved email password:", password)  
+    password = os.environ.get('EMAIL_PASSWORD') 
     # Accessing environment variable
     #password = "iazb gjjc fpwc stpv"
     subject = "Threshold Condition Failed"

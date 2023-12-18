@@ -4,6 +4,7 @@ import pandas as pd
 import joblib
 import neptune
 import datetime
+import os
 
 # Generate a unique key for the model
 timestamp = datetime.datetime.now().strftime("%d%H%M")
@@ -13,7 +14,7 @@ model = neptune.init_model(
     name="Prediction model H20.ai AutoML",
     key= model_key,
     project="Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project",
-    api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI5Mjg3OTM1OS01MjI2LTQzY2ItOTIzMi02YjIyMGMwZTUzMjkifQ==",
+    api_token=os.environ.get('API_TOKEN'),
 )
 
 def train_h2o_automl(cleaned_dataset):

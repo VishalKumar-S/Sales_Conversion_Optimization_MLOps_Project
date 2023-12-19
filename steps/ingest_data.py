@@ -55,7 +55,7 @@ def ingest_data(url: str) -> pd.DataFrame:
 
 @step(enable_cache=False)
 def data_quality_validation(curr_data: pd.DataFrame) -> pd.DataFrame:
-    """ZenML Step: Validates data quality and triggers email on failure."""
+    """ZenML Step: Validates data quality and triggers email on failure"""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])
     test_suite.run(reference_data=None, current_data=curr_data)
     

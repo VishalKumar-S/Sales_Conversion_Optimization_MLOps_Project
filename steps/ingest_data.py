@@ -37,7 +37,7 @@ class DataFetcher:
 
 
 class DataIngestor:
-    """Class responsible for data ingestion."""
+    """Class responsible for data ingestion"""
 
     @staticmethod
     def ingest_data(url: str) -> pd.DataFrame:

@@ -195,6 +195,23 @@ Docker is an essential tool for packaging and distributing applications. Here's 
 
 - Configured CI/CD workflow for automated execution
 
+# Continuous Machine Learning (CML) Reports 📊
+
+## CML Reports Integration 🚀
+
+🎯 Predictions Scatter Plot: Visualizes model predictions against actual conversions.
+📈 Residuals Plot: Illustrates the differences between predicted and actual values.
+
+## GitHub Actions Workflow 🛠️
+
+Integrated into CI/CD pipeline:
+- Automatic generation on every push event.
+- Visual insights available directly in the repository.
+
+![Predictions Scatter Plot](CML_Reports/predictions_scatter_plot.png)
+![Residuals Plot](CML_Reports/residuals_plot.png)
+
+🌟 These reports enhance transparency and provide crucial insights into model performance! 🌟
 
 
 # Running the Project 🚀

@@ -6,18 +6,18 @@ import neptune
 import datetime
 import os
 
-# Generate a unique key for the model
-timestamp = datetime.datetime.now().strftime("%d%H%M")
-model_key = f"MOD{timestamp}"
+class ModelFactory:
+    @staticmethod
+    def create_model(name, key, project, api_token):
+        model = neptune.init_model(
+            name=name,
+            key=key,
+            project=project,
+            api_token=api_token,
+        )
+        return model
 
-model = neptune.init_model(
-    name="Prediction model H20.ai AutoML",
-    key= model_key,
-    project="Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project",
-    api_token=os.environ.get('API_TOKEN'),
-)
-
-def train_h2o_automl(cleaned_dataset):
+def train_h2o_automl(cleaned_dataset, model):
     # Initialize H2O
     h2o.init()
     # Load data
@@ -40,14 +40,8 @@ def train_h2o_automl(cleaned_dataset):
     model_path = "./models/best_model.zip"
     aml.leader.download_mojo(model_path, get_genmodel_jar=True)
 
-    # View the AutoML Leaderboard
-    lb = aml.leaderboard
-    best_model = aml.leader
-    print(lb)
-    print(best_model)
-
     # Get model performance
-    perf = best_model.model_performance()
+    perf = aml.leader.model_performance()
 
     # Log model performance metrics to Neptune
     model["r2"].log(perf.r2())
@@ -68,4 +62,18 @@ def train_h2o_automl(cleaned_dataset):
     train_df['prediction'] = train_pred.as_data_frame()
     test_df['prediction'] = test_pred.as_data_frame()
 
-    return train_df, test_df 
+    return train_df, test_df
+
+# Example usage:
+timestamp = datetime.datetime.now().strftime("%d%H%M")
+model_key = f"MOD{timestamp}"
+
+model = ModelFactory.create_model(
+    name="Prediction model H20.ai AutoML",
+    key=model_key,
+    project="Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project",
+    api_token=os.environ.get('API_TOKEN'),
+)
+
+# Call the training function
+train_df, test_df = train_h2o_automl(cleaned_dataset, model)

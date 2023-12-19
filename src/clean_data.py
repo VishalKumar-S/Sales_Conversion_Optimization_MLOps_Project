@@ -1,25 +1,30 @@
-# Import necessary libraries
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
 class DataPreprocessor:
     def __init__(self, data):
         self.data = data
 
-    def clean_data(self):
+    def clean_data(self)->pd.DataFrame:
         # Apply cleaning operations to the DataFrame
-        self.data.drop(self.data.loc[self.data['Impressions'] > 2000000].index, inplace=True)
-        self.data.drop(self.data.loc[self.data['Spent'] > 500].index, inplace=True)
-
-        self.data.drop(['ad_id', 'xyz_campaign_id', 'fb_campaign_id', 'gender', 'interest', 'age'], axis=1, inplace=True)
-
-        # Calculate Cost per Click (CPC)
-        self.data['CPC'] = self.data['Spent'] / self.data['Clicks']
-
-        # Impute missing values with 0 for specified columns (CPC)
-        columns_to_impute = ['CPC']
-        self.data[columns_to_impute] = self.data[columns_to_impute].fillna(0)
-
+        self.data = self.drop_rows(self.data, 'Impressions', 2000000)
+        self.data = self.drop_rows(self.data, 'Spent', 500)
+        self.data = self.drop_columns(self.data, ['ad_id', 'xyz_campaign_id', 'fb_campaign_id', 'gender', 'interest', 'age'])
+        self.data['CPC'] = self.calculate_cpc(self.data)
+        self.data = self.impute_missing_values(self.data, ['CPC'])
+        
         # Return the cleaned DataFrame
         return self.data
 
+    def drop_rows(self, data, column, threshold):
+        return data.loc[data[column] <= threshold]
+
+    def drop_columns(self, data, columns):
+        return data.drop(columns, axis=1)
+
+    def calculate_cpc(self, data):
+        data['CPC'] = data['Spent'] / data['Clicks']
+        return data['CPC']
+
+    def impute_missing_values(self, data, columns):
+        data[columns] = data[columns].fillna(0)
+        return data

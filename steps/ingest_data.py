@@ -47,7 +47,7 @@ class DataIngestor:
         return fetcher.convert_to_dataframe(data_text)
 
 
-@step(enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
 def ingest_data(url: str) -> pd.DataFrame:
     """ZenML Step: Ingests data from the provided URL."""
     return DataIngestor.ingest_data(url)

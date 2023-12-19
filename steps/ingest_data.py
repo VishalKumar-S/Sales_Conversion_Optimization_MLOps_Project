@@ -6,7 +6,10 @@ from zenml import step
 from evidently.test_suite import TestSuite
 from evidently.test_preset import DataQualityTestPreset
 from steps.email_report import email_report
-
+from neptune.types import File
+import neptune
+from neptune.types import File
+from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 
 class DataFetcher:
     """Class to fetch data from a specified URL."""
@@ -25,7 +28,11 @@ class DataFetcher:
     def convert_to_dataframe(data_text: Optional[str]) -> pd.DataFrame:
         """Convert data text to Pandas DataFrame."""
         if data_text:
-            return pd.read_csv(StringIO(data_text))
+            # Initialize a run
+            neptune_run = get_neptune_run()
+            df = pd.read_csv(StringIO(data_text))
+            neptune_run["data/Training_data"].upload(File.as_html(df))
+            return df
         return None
 
 

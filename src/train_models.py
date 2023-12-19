@@ -6,10 +6,6 @@ import neptune
 import datetime
 import os
 
-# Example usage:
-timestamp = datetime.datetime.now().strftime("%d%H%M")
-model_key = f"MOD{timestamp}"
-
 class ModelFactory:
     @staticmethod
     def create_model(name, key, project, api_token):
@@ -21,14 +17,7 @@ class ModelFactory:
         )
         return model
 
-def train_h2o_automl(cleaned_dataset):
-
-    model = ModelFactory.create_model(
-    name="Prediction model H20.ai AutoML",
-    key=model_key,
-    project="Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project",
-    api_token=os.environ.get('API_TOKEN'),)
-
+def train_h2o_automl(cleaned_dataset, model):
     # Initialize H2O
     h2o.init()
     # Load data
@@ -75,6 +64,16 @@ def train_h2o_automl(cleaned_dataset):
 
     return train_df, test_df
 
+# Example usage:
+timestamp = datetime.datetime.now().strftime("%d%H%M")
+model_key = f"MOD{timestamp}"
 
+model = ModelFactory.create_model(
+    name="Prediction model H20.ai AutoML",
+    key=model_key,
+    project="Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project",
+    api_token=os.environ.get('API_TOKEN'),
+)
 
-
+# Call the training function
+train_df, test_df = train_h2o_automl(cleaned_dataset, model)

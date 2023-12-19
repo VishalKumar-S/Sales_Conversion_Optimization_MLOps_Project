@@ -8,12 +8,8 @@ from evidently.test_suite import TestSuite
 from evidently.tests import TestValueMeanError
 from steps.email_report import email_report
 import logging
-from neptune.types import File
-import neptune
-from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
-from src.train_models import train_h2o_automl
 
-@step(enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker", enable_cache=False)
 def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Initialize a run
     neptune_run = get_neptune_run()
@@ -45,14 +41,7 @@ def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame):
     logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
     
     if threshold < 0.65:
-
-        # Initialize a run
-        neptune_run = get_neptune_run()
-
         test_suite.save_html("Reports/model_performance_suite.html")
-
-        neptune_run["html/Model Performance"].upload("Reports/model_performance_suite.html")
-
         email_report(passed_tests, failed_tests, total_tests, test_name, "Reports/model_performance_suite.html")
     else:
         logging.info(f"All Model Performance checks passed")

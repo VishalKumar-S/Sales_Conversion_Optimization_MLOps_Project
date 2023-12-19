@@ -10,18 +10,14 @@ from evidently.tests import *
 from evidently.test_preset import DataDriftTestPreset
 from steps.email_report import email_report
 from sklearn.model_selection import train_test_split
-from neptune.types import File
-import neptune
-from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 
 class DataCleaner:
     @staticmethod
-    def clean(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def clean(df: pd.DataFrame) -> pd.DataFrame:
         preprocessor = DataPreprocessor(df)
         cleaned_data = preprocessor.clean_data()
-        cleaned_data_without_target= cleaned_data.copy()
-        cleaned_data_without_target.drop(['Approved_Conversion'], axis=1, inplace=True)
-        return cleaned_data, cleaned_data_without_target
+        cleaned_data.drop(['Approved_Conversion'], axis=1, inplace=True)
+        return cleaned_data
 
 class DataDriftValidator:
     @staticmethod
@@ -35,13 +31,7 @@ class DataDriftValidator:
         total_tests = test_suite.as_dict()['summary']['total_tests']
         logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
         if threshold < 0.65:
-            # Initialize a run
-            neptune_run = get_neptune_run()
-
             test_suite.save_html("Reports/data_drift_suite.html")
-
-            neptune_run["html/Data Drift Test"].upload("Reports/data_drift_suite.html")
-
             email_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Reports/data_drift_suite.html")
         else:
             logging.info(f"All Data Drift checks passed")
@@ -51,8 +41,8 @@ class DataDriftValidator:
 @step(enable_cache=False)
 def clean_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     try:
-        cleaned_data, cleaned_data_without_target = DataCleaner.clean(df)
-        reference_dataset, current_dataset = train_test_split(cleaned_data_without_target, train_size=70, random_state=42)
+        cleaned_data = DataCleaner.clean(df)
+        reference_dataset, current_dataset = train_test_split(cleaned_data, train_size=70, random_state=42)
         return cleaned_data, reference_dataset, current_dataset
     except Exception as e:
         logging.error(e)

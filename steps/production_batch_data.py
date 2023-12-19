@@ -2,9 +2,7 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from zenml import step
 import logging
-import neptune
-from neptune.types import File
-from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
+
 
 class DataReader(ABC):
     @abstractmethod
@@ -15,13 +13,7 @@ class DataReader(ABC):
 class CSVDataReader(DataReader):
     def read_data(self, data_path: str) -> pd.DataFrame:
         try:
-            # Initialize a run
-            neptune_run = get_neptune_run()
-            
             df = pd.read_csv(data_path)
-
-            neptune_run["data/Prod_batch_data"].upload(File.as_html(df))
-
             logging.info("Read CSV file completed.")
             return df
         except Exception as e:

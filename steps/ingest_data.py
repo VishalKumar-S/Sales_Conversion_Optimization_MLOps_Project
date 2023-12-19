@@ -49,7 +49,7 @@ class DataIngestor:
 
 @step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
 def ingest_data(url: str) -> pd.DataFrame:
-    """ZenML Step: Ingests data from the provided URL."""
+    """ZenML Step: Ingests data from the provided URL"""
     return DataIngestor.ingest_data(url)
 
 

@@ -13,11 +13,12 @@ from sklearn.model_selection import train_test_split
 
 class DataCleaner:
     @staticmethod
-    def clean(df: pd.DataFrame) -> pd.DataFrame:
+    def clean(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
         preprocessor = DataPreprocessor(df)
         cleaned_data = preprocessor.clean_data()
-        cleaned_data.drop(['Approved_Conversion'], axis=1, inplace=True)
-        return cleaned_data
+        cleaned_data_without_target= cleaned_data.copy()
+        cleaned_data_without_target.drop(['Approved_Conversion'], axis=1, inplace=True)
+        return cleaned_data, cleaned_data_without_target
 
 class DataDriftValidator:
     @staticmethod
@@ -37,12 +38,12 @@ class DataDriftValidator:
             logging.info(f"All Data Drift checks passed")
             return reference_dataset, current_dataset
 
-
 @step(enable_cache=False)
 def clean_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     try:
         cleaned_data = DataCleaner.clean(df)
-        reference_dataset, current_dataset = train_test_split(cleaned_data, train_size=70, random_state=42)
+        cleaned_data, cleaned_data_without_target = DataCleaner.clean(df)
+        reference_dataset, current_dataset = train_test_split(cleaned_data_without_target, train_size=70, random_state=42)
         return cleaned_data, reference_dataset, current_dataset
     except Exception as e:
         logging.error(e)

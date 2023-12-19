@@ -58,7 +58,7 @@ def clean_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
         logging.error(e)
         raise e
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(enable_cache=False)
 def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
         reference_dataset, current_dataset = DataDriftValidator.validate(reference_dataset, current_dataset)

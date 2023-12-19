@@ -47,13 +47,13 @@ class DataIngestor:
         return fetcher.convert_to_dataframe(data_text)
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(enable_cache=False)
 def ingest_data(url: str) -> pd.DataFrame:
     """ZenML Step: Ingests data from the provided URL."""
     return DataIngestor.ingest_data(url)
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(enable_cache=False)
 def data_quality_validation(curr_data: pd.DataFrame) -> pd.DataFrame:
     """ZenML Step: Validates data quality and triggers email on failure."""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])

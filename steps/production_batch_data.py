@@ -51,7 +51,7 @@ class DataReaderFactory:
             raise ValueError(f"Unsupported data format: {data_format}")
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(enable_cache=False)
 def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFrame:
     """
     Args:

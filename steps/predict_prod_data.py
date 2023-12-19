@@ -48,7 +48,7 @@ class PredictionFacade:
         return fig
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(enable_cache=False)
 def predict_prod_data(ref_data: pd.DataFrame, curr_data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
         PredictionFacade.init_h2o()

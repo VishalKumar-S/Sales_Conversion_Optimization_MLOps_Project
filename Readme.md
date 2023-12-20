@@ -9,7 +9,7 @@
 5. [Continuous Integration Pipeline](#continuous-integration-pipeline) 🔁
 6. [Email Report](#email-report) 📧
 7. [Prediction App](#prediction-app) 🎯
-8. [Prediction App](#prediction-app) 🎯
+8. [Neptune.ai Dashboard](#neptune.ai-dashboard) 🌊
 9. [Docker Configuration](#docker-configuration) 🐳
 10. [GitHub Actions](#github-actions) 🛠️
 11. [Running the Project](#running-the-project) 🚀

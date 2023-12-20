@@ -228,13 +228,25 @@ Necessary Commands:
     model["rmsle"].log(perf.rmsle())
     model["mae"].log(perf.mae())
     ```
-
+Neptune.ai Dashboard runs:
 ![Neptune.ai Dashboard runs](assets/neptune-runs.PNG)
+
+Neptune.ai Dashboard Code files:
 ![Neptune.ai Dashboard Code files](assets/neptune-code-files.PNG)
+
+Neptune.ai Dashboard Datasets:
 ![Neptune.ai Dashboard Datasets](assets/neptune-data.PNG)
+
+Neptune.ai Dashboard visualisations:
 ![Neptune.ai Dashboard visualisations](assets/neptune-visuals.PNG)
+
+Neptune.ai Dashboard HTML reports:
 ![Neptune.ai Dashboard HTML reports](assets/neptune-html-reports.PNG)
+
+Neptune.ai Dashboard models:
 ![Neptune.ai Dashboard models](assets/neptune-models.PNG)
+
+Neptune.ai Dashboard model metrics:
 ![Neptune.ai Dashboard model metrics](assets/neptune-metrics.PNG)
 
 Access my Neptune.ai Dashboard [here](https://app.neptune.ai/o/Vishal-Kumar-S/org/Sales-Conversion-Optimisation-MLOps-Project)

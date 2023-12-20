@@ -9,9 +9,10 @@
 5. [Continuous Integration Pipeline](#continuous-integration-pipeline) 🔁
 6. [Email Report](#email-report) 📧
 7. [Prediction App](#prediction-app) 🎯
-8. [Docker Configuration](#docker-configuration) 🐳
-9. [GitHub Actions](#github-actions) 🛠️
-10. [Running the Project](#running-the-project) 🚀
+8. [Prediction App](#prediction-app) 🎯
+9. [Docker Configuration](#docker-configuration) 🐳
+10. [GitHub Actions](#github-actions) 🛠️
+11. [Running the Project](#running-the-project) 🚀
 
 
 # Project Description 🚀
@@ -178,7 +179,70 @@ To run the streamlit application,
 
 This application provides an intuitive interface for users to make predictions and explore model metrics effortlessly. 📊✨
 
-### Docker Configuration 🐳
+# Neptune.ai Dashboard 🌊
+
+## Leveraging the Power of Neptune.ai for Enhanced Insights and Management 🚀
+
+Neptune.ai offers an intuitive dashboard for comprehensive tracking and management of experiments, model metrics, and pipeline performance. Let's dive into its features:
+
+1. **Visual Metrics**: Visualize model performance metrics with interactive charts and graphs for seamless analysis. 📈📊
+2. **Experiment Management**: Track experiments, parameters, and results in a structured and organized manner. 🧪📋
+3. **Integration Capabilities**: Easily integrate Neptune.ai with pipeline steps for automated tracking and reporting. 🤝🔗
+4. **Collaboration Tools**: Facilitate teamwork with collaborative features and easy sharing of experiment results. 🤝💬
+5. **Code and Environment Tracking**: Monitor code versions and track environments used during experimentation for reproducibility. 🛠️📦
+
+Necessary Commands:
+
+1. Necessary imports:
+    ```bash
+    import neptune
+    from neptune.types import File
+    from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
+    ```
+
+2. Initiate the neptune run             
+    ```bash
+    neptune_run = get_neptune_run()
+    ```
+
+3. To track the pandas dataframe: 
+    ```bash
+    neptune_run["data/Training_data"].upload(File.as_html(df))
+    ```
+
+4. Track HTML reports: 
+    ```bash
+    neptune_run["html/Data Quality Test"].upload("Reports/data_quality_suite.html")
+    ```
+
+5. Track plot and graph visualisations:        
+    ```bash
+    neptune_run["visuals/scatter_plot"].upload(File.as_html(fig1))
+    ```
+
+6. Track model metrics:
+    ```bash
+    model["r2"].log(perf.r2())
+    model["mse"].log(perf.mse())
+    model["rmse"].log(perf.rmse())
+    model["rmsle"].log(perf.rmsle())
+    model["mae"].log(perf.mae())
+    ```
+
+![Neptune.ai Dashboard runs](assets/neptune-runs.PNG)
+![Neptune.ai Dashboard Code files](assets/neptune-code-files.PNG)
+![Neptune.ai Dashboard Datasets](assets/neptune-data.PNG)
+![Neptune.ai Dashboard visualisations](assets/neptune-visuals.PNG)
+![Neptune.ai Dashboard HTML reports](assets/neptune-html-reports.PNG)
+![Neptune.ai Dashboard models](assets/neptune-models.PNG)
+![Neptune.ai Dashboard model metrics](assets/neptune-metrics.PNG)
+
+Access my Neptune.ai Dashboard [here](https://app.neptune.ai/o/Vishal-Kumar-S/org/Sales-Conversion-Optimisation-MLOps-Project)
+
+Neptune.ai enhances the project by providing a centralized platform for managing experiments and gaining deep insights into model performance, contributing to informed decision-making. 📊✨
+
+
+# Docker Configuration 🐳
 
 Docker is an essential tool for packaging and distributing applications. Here's how to set up and use Docker for this project:
 

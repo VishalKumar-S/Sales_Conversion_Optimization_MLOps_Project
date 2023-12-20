@@ -6,6 +6,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import logging
 
+from neptune.types import File
+import neptune
+from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
+
 class PredictionFacade:
     @staticmethod
     def init_h2o():
@@ -21,30 +25,30 @@ class PredictionFacade:
 
     @staticmethod
     def generate_scatter_plot(ref_data, curr_data):
-        plt.figure(figsize=(10, 6))
-        plt.scatter(ref_data['prediction'], ref_data['Approved_Conversion'], label='Reference Data')
-        plt.scatter(curr_data['prediction'], curr_data['Approved_Conversion'], label='Current Data')
-        plt.title('Predictions vs Actual')
-        plt.xlabel('Predictions')
-        plt.ylabel('Actual')
-        plt.legend()
-        plt.savefig('CML_Reports/predictions_scatter_plot.png')
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.scatter(ref_data['prediction'], ref_data['Approved_Conversion'], label='Reference Data')
+        ax.scatter(curr_data['prediction'], curr_data['Approved_Conversion'], label='Current Data')
+        ax.set_title('Predictions vs Actual')
+        ax.set_xlabel('Predictions')
+        ax.set_ylabel('Actual')
+        ax.legend()
+        fig.savefig('CML_Reports/predictions_scatter_plot.png')
+        return fig
 
     @staticmethod
     def generate_residuals_plot(ref_data, curr_data):
-        plt.figure(figsize=(10, 6))
-        plt.scatter(ref_data['prediction'], ref_data['prediction'] - ref_data['Approved_Conversion'],
-                    label='Reference Data')
-        plt.scatter(curr_data['prediction'], curr_data['prediction'] - curr_data['Approved_Conversion'],
-                    label='Current Data')
-        plt.title('Residuals Plot')
-        plt.xlabel('Predictions')
-        plt.ylabel('Residuals')
-        plt.legend()
-        plt.savefig('CML_Reports/residuals_plot.png')
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.scatter(ref_data['prediction'], ref_data['prediction'] - ref_data['Approved_Conversion'],label='Reference Data')
+        ax.scatter(curr_data['prediction'], curr_data['prediction'] - curr_data['Approved_Conversion'], label='Current Data')
+        ax.set_title('Residuals Plot')
+        ax.set_xlabel('Predictions')
+        ax.set_ylabel('Residuals')
+        ax.legend()
+        fig.savefig('CML_Reports/residuals_plot.png')
+        return fig
 
 
-@step(enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
 def predict_prod_data(ref_data: pd.DataFrame, curr_data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
         PredictionFacade.init_h2o()
@@ -54,11 +58,18 @@ def predict_prod_data(ref_data: pd.DataFrame, curr_data: pd.DataFrame) -> Tuple[
         ref_data['prediction'] = PredictionFacade.make_predictions(ref_data, trained_model)
         curr_data['prediction'] = PredictionFacade.make_predictions(curr_data, trained_model)
 
-        PredictionFacade.generate_scatter_plot(ref_data, curr_data)
-        PredictionFacade.generate_residuals_plot(ref_data, curr_data)
+        # Initialize a run
+        neptune_run = get_neptune_run()
+
+        fig1 = PredictionFacade.generate_scatter_plot(ref_data, curr_data)
+        neptune_run["visuals/scatter_plot"].upload(File.as_html(fig1))
+
+        fig2 =PredictionFacade.generate_residuals_plot(ref_data, curr_data)
+        neptune_run["visuals/residuals_plot"].upload(File.as_html(fig2))
 
         print(ref_data.head(5))
         print(curr_data.head(5))
+            
         return ref_data, curr_data
     except Exception as e:
         logging.error(f"An error occurred: {e}")

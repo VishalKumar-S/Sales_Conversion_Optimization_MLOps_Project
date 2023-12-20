@@ -10,6 +10,9 @@ from evidently.tests import *
 from evidently.test_preset import DataDriftTestPreset
 from steps.email_report import email_report
 from sklearn.model_selection import train_test_split
+from neptune.types import File
+import neptune
+from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 
 class DataCleaner:
     @staticmethod
@@ -32,7 +35,12 @@ class DataDriftValidator:
         total_tests = test_suite.as_dict()['summary']['total_tests']
         logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
         if threshold < 0.65:
+
+            # Initialize a run
+            neptune_run = get_neptune_run()
+
             test_suite.save_html("Reports/data_drift_suite.html")
+            neptune_run["html/Data Drift Test"].upload("Reports/data_drift_suite.html")
             email_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Reports/data_drift_suite.html")
         else:
             logging.info(f"All Data Drift checks passed")

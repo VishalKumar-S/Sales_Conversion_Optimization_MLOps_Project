@@ -1,11 +1,14 @@
 from zenml import step
 from email.mime.multipart import MIMEMultipart
+#from zenml.integrations.slack.steps.slack_alerter_post_step import slack_alerter_post_step
+#from zenml.integrations.discord.steps.discord_alerter_post_step import discord_alerter_post_step
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import smtplib
 import logging
 import os
+import streamlit as st
 
 
 class EmailSender:
@@ -22,6 +25,13 @@ class EmailSender:
         message['Subject'] = self.subject
 
         body = f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, total out of {total_tests} tests conducted in {test_name}."
+        
+        #Send alerts in Slack
+        #slack_alerter_post_step(body+ f"The failed test reports are attached and sent to the {self.receiver} email-id")
+
+        #Send alerts in Discord
+        #discord_alerter_post_step(body+ f"The failed test reports are attached and sent to the {self.receiver} email-id")
+
         message.attach(MIMEText(body, "plain"))
 
         filename = path
@@ -38,6 +48,10 @@ class EmailSender:
             server.sendmail(self.sender, self.receiver, message.as_string())
 
         logging.info("E-mail report sent successfully")
+        st.write("✉️ E-mail report sent successfully")
+        st.write("❌ Validation failed for the batch data. Your data needs attention! 🚨")
+
+        
 
 
 @step(enable_cache=False)

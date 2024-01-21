@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 from neptune.types import File
 import neptune
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
+import streamlit as st
 
 class DataCleaner:
     @staticmethod
@@ -33,7 +34,10 @@ class DataDriftValidator:
         passed_tests = test_suite.as_dict()['summary']['success_tests']
         failed_tests = test_suite.as_dict()['summary']['failed_tests']
         total_tests = test_suite.as_dict()['summary']['total_tests']
-        logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
+        logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted in Data Drift.")
+        st.write(f"Number of passed tests: {passed_tests} ✅, "
+             f"Number of failed tests: {failed_tests} ❌, "
+             f"Out of {total_tests} tests conducted in Data Drift.")
         if threshold < 0.65:
 
             # Initialize a run

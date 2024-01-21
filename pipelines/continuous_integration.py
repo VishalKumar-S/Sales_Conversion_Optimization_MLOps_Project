@@ -8,6 +8,7 @@ from steps.email_report import email_report
 import logging
 from steps.production_batch_data import production_batch_data
 from steps.predict_prod_data import predict_prod_data
+import streamlit as st
 
 @pipeline(enable_cache=False)
 def continuous_integration(path: str):
@@ -24,6 +25,7 @@ def continuous_integration(path: str):
     cleaned_data_ref, cleaned_data_curr = data_drift_validation(cleaned_data_ref, cleaned_data_curr)
     predicted_ref_data, predicted_curr_data = predict_prod_data(cleaned_data_ref,cleaned_data_curr )
     model_performance_validation(predicted_ref_data, predicted_curr_data)
+    st.write("")
 
 
 

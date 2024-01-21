@@ -10,6 +10,7 @@ from steps.email_report import email_report
 import logging
 from neptune.types import File
 import neptune
+import streamlit as st
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 from src.train_models import train_h2o_automl
 
@@ -44,7 +45,10 @@ def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame):
     failed_tests = test_suite.as_dict()['summary']['failed_tests']
     total_tests = test_suite.as_dict()['summary']['total_tests']
     logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted.")
-    
+    st.write(f"Number of passed tests: {passed_tests} ✅, "
+             f"Number of failed tests: {failed_tests} ❌, "
+             f"Out of {total_tests} tests conducted in model validation.")
+
     if threshold < 0.65:
 
         # Initialize a run

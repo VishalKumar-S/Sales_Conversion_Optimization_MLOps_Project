@@ -22,7 +22,6 @@ class ModelFactory:
         return model
 
 def train_h2o_automl(cleaned_dataset):
-
     model = ModelFactory.create_model(
     name="Prediction model H20.ai AutoML",
     key=model_key,
@@ -41,7 +40,7 @@ def train_h2o_automl(cleaned_dataset):
     predictors = data.columns.drop(response).tolist()
 
     # Split the data into train and test sets for model validation
-    train, test = h2o_data.split_frame(ratios=[0.8])
+    train, test = h2o_data.split_frame(ratios=[0.8], seed=42)
 
     # Initialize and train the H2OAutoML model
     aml = H2OAutoML(max_models=20, seed=42)
@@ -49,10 +48,19 @@ def train_h2o_automl(cleaned_dataset):
 
     # Save the best model
     model_path = "./models/best_model.zip"
-    aml.leader.download_mojo(model_path, get_genmodel_jar=True)
+    best_model = aml.leader
+    print(best_model)
+
+    model_type = best_model.model_id 
+    print(model_type)
+
+    model["model_type"] = best_model.model_id
+    model["hyperparameters"] = best_model.params
+
+    best_model.download_mojo(model_path, get_genmodel_jar=True)
 
     # Get model performance
-    perf = aml.leader.model_performance()
+    perf = best_model.model_performance()
 
     # Log model performance metrics to Neptune
     model["r2"].log(perf.r2())

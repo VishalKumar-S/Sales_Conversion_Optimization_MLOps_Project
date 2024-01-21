@@ -12,9 +12,10 @@ from neptune.types import File
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 from neptune.types import File
 import neptune
+import logging
 from neptune.types import File
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
-
+import streamlit as st
 
 class DataFetcher:
     """Class to fetch data from a specified URL."""
@@ -68,7 +69,11 @@ def data_quality_validation(curr_data: pd.DataFrame) -> pd.DataFrame:
     passed_tests = summary['success_tests']
     failed_tests = summary['failed_tests']
     total_tests = summary['total_tests']
-    
+    logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted in Data Quality.")
+    st.write(f"Number of passed tests: {passed_tests} ✅, "
+             f"Number of failed tests: {failed_tests} ❌, "
+             f"Out of {total_tests} tests conducted in Data Quality.")
+        
     threshold = passed_tests / total_tests if total_tests > 0 else 0
 
     if threshold < 0.85:

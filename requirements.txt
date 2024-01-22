@@ -8,4 +8,7 @@ streamlit
 neptune
 matplotlib==3.4.3
 email_validator
+discord.py
+slack_sdk
+
 

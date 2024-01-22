@@ -5,7 +5,7 @@ from typing import Optional
 from zenml import step
 from evidently.test_suite import TestSuite
 from evidently.test_preset import DataQualityTestPreset
-from steps.email_report import email_report
+from steps.alert_report import alert_report
 from neptune.types import File
 import neptune
 from neptune.types import File
@@ -60,7 +60,7 @@ def ingest_data(url: str) -> pd.DataFrame:
 
 
 @step(enable_cache=False)
-def data_quality_validation(curr_data: pd.DataFrame) -> pd.DataFrame:
+def data_quality_validation(curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
     """ZenML Step: Validates data quality and triggers email on failure"""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])
     test_suite.run(reference_data=None, current_data=curr_data)
@@ -81,10 +81,10 @@ def data_quality_validation(curr_data: pd.DataFrame) -> pd.DataFrame:
         # Initialize a run
         neptune_run = get_neptune_run()
 
-        test_suite.save_html("Reports/data_quality_suite.html")
+        test_suite.save_html("Evidently_Reports/data_quality_suite.html")
 
-        neptune_run["html/Data Quality Test"].upload("Reports/data_quality_suite.html")
+        neptune_run["html/Data Quality Test"].upload("Evidently_Reports/data_quality_suite.html")
         
-        email_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Reports/data_quality_suite.html")
+        alert_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Evidently_Reports/data_quality_suite.html", user_email)
     else:
         return curr_data

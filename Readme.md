@@ -42,7 +42,7 @@ Let's dive into the project structure! 📁 Here's a breakdown of the directory:
 
 - **pipelines Folder 📂**
   - training_pipeline
-  - continuous_integration
+  - ci_cd_pipeline
 
 - **models Folder 📁**
   - saved best H20.AI model
@@ -113,7 +113,7 @@ In this pipeline, we embark on a journey through various steps to train our mode
 6. **steps/train_model.py**: Utilizes h2o.ai AUTOML for model selection.
 7. **src/train_models.py**: Implements the best model on the cleaned dataset.
 8. **model_performance_Evaluation.py**: Assesses model performance on a split dataset.
-9. **steps/email_report.py**: Here, if any of teh validation test suites, didn't meet the threshold condition, email will be sent to the user, along with the failed Evidently.AI generated HTML reports.
+9. **steps/alert_report.py**: Here, if any of teh validation test suites, didn't meet the threshold condition, email will be sent to the user, along with the failed Evidently.AI generated HTML reports.
 
 Each step is crucial in refining and validating our model. All aboard the train pipeline! 🌟🚆
 
@@ -128,7 +128,7 @@ Here's how it flows:
 
 1. **ci-cd.py**: Triggered to initiate the CI/CD pipeline.
 2. **steps/production_batch_data**: Accesses production batch data from the Production_data folder
-3. **pipelines/continuous_integration.py**: As we already discussed earlier, we conduct Data Quality, Data Drift as previously we did, if threshold fails, email reports are sent.
+3. **pipelines/ci_cd_pipeline.py**: As we already discussed earlier, we conduct Data Quality, Data Drift as previously we did, if threshold fails, email reports are sent.
 4. **steps/predict_production_Data.py**: Utilizes the pre-trained best model to make predictions on new production data. Then, we conduct Model Performance validation as previously we did, if threshold fails, email reports are sent.
 
 This pipeline is crucial for maintaining a continuous and reliable deployment process. 🔁✨
@@ -153,7 +153,7 @@ Upon data quality or data drift test or model performance validation tests failu
 
 ### Integration with Pipeline Steps
 
-This email functionality is integrated into the pipeline steps via Python scripts (`steps/email_report.py`). If a particular test threshold fails, the execution pauses and an email is dispatched. Successful test completions proceed to the next step in the pipeline.
+This email functionality is integrated into the pipeline steps via Python scripts (`steps/alert_report.py`). If a particular test threshold fails, the execution pauses and an email is dispatched. Successful test completions proceed to the next step in the pipeline.
 
 This notification system helps ensure the integrity and reliability of the data processing and model performance at each stage of the pipeline.
 
@@ -212,7 +212,7 @@ Necessary Commands:
 
 4. Track HTML reports: 
     ```bash
-    neptune_run["html/Data Quality Test"].upload("Reports/data_quality_suite.html")
+    neptune_run["html/Data Quality Test"].upload("Evidently_Reports/data_quality_suite.html")
     ```
 
 5. Track plot and graph visualisations:        

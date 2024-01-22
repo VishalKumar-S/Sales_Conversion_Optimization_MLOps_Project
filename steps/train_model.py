@@ -6,7 +6,7 @@ from evidently import ColumnMapping
 from typing import Tuple
 from evidently.test_suite import TestSuite
 from evidently.tests import TestValueMeanError
-from steps.email_report import email_report
+from steps.alert_report import alert_report
 import logging
 from neptune.types import File
 import neptune
@@ -33,7 +33,7 @@ def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFra
     return train_df, test_df
 
 @step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
-def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame):
+def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame, user_email: str):
     column_mapping = ColumnMapping()
     column_mapping.target = 'Approved_Conversion'
     column_mapping.prediction = 'prediction'
@@ -54,8 +54,8 @@ def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame):
         # Initialize a run
         neptune_run = get_neptune_run()
 
-        test_suite.save_html("Reports/model_performance_suite.html")
-        neptune_run["html/Model Performance"].upload("Reports/model_performance_suite.html")
-        email_report(passed_tests, failed_tests, total_tests, test_name, "Reports/model_performance_suite.html")
+        test_suite.save_html("Evidently_Reports/model_performance_suite.html")
+        neptune_run["html/Model Performance"].upload("Evidently_Reports/model_performance_suite.html")
+        alert_report(passed_tests, failed_tests, total_tests, test_name, "Evidently_Reports/model_performance_suite.html", user_email)
     else:
         logging.info(f"All Model Performance checks passed")

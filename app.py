@@ -14,7 +14,9 @@ from evidently.metric_preset import DataQualityPreset
 from evidently.metric_preset.regression_performance import RegressionPreset
 import time
 from src.clean_data import DataPreprocessor
-from pipelines.continuous_integration import continuous_integration
+from pipelines.ci_cd_pipeline import ci_cd_pipeline
+from email_validator import validate_email, EmailNotValidError
+
 
 
 
@@ -354,15 +356,46 @@ elif app_selector == "Test Your Batch Data":
         # Provide a confirmation message
         path = "Production_data/batch_validation_data.csv"
         st.success("📂 Dataset uploaded successfully!")
+
+    if not uploaded_file:
+        st.warning("⚠️ Please upload a valid CSV file to initiate the validation process.")
+        st.stop()
+
+    # Step to Get Email Address
+    st.subheader("Step 2: Provide Email Address for Alerts")
+    st.write("""Please enter your email address below.  
+           If any of the validation tests fail, you will receive 
+           an email alert with the test report attached. This can
+           help you investigate and fix any data issues.""")
+           
+    email = st.text_input("Email Address")
+    
+    # Check if the email is provided before attempting validation
+    if email:
+        try:
+            validate_email(email)
+            st.success("Valid Email Address", icon="✅")
+            st.write(f"We will send an alert to {email} if any tests fail")   
+        except EmailNotValidError:
+            st.error("Invalid Email", icon="🚨")
+            st.stop()
+
+        st.write("In case of any failed tests, alerts will also be posted to:") 
+
+        st.markdown("Discord: [#failed-alerts](https://discord.gg/bxZx6EGVMD)") 
+
+        st.markdown("Slack: [#sales-conversion-test-failures](https://join.slack.com/t/vishalsworkspaceco/shared_invite/zt-2b00eaite-KHPsBmlsM2JtsmR2oN0qrQ)") 
+
+        st.write("You can check the above channels at any time to view the latest failed validation results.")
         st.write("Now, we'll proceed with the validation tests.")
 
         # Step 2: Data Validation Progress
-        st.subheader("Step 2: Data Validation Progress")
+        st.subheader("Step 3: Data Validation Progress")
         st.write("The dataset is undergoing 34 validation tests to ensure its quality and adherence to expected standards. "
                  "Please wait while the validation process is in progress.....")
 
         # Run the validation tests
-        continuous_integration(path)
+        ci_cd_pipeline(path,email)
         st.write("🎉 All tests are validated successfully for the batch data. Your data is ready to go!")
 
         # Displaying visualizations
@@ -378,6 +411,3 @@ elif app_selector == "Test Your Batch Data":
         st.image(residuals_plot_path, caption="Residuals Plot", use_column_width=True)
 
 
-    else:
-        # Prompt the user to upload a valid CSV file
-        st.warning("⚠️ Please upload a valid CSV file to initiate the validation process.")

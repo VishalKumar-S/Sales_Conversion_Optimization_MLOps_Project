@@ -7,5 +7,5 @@ evidently
 streamlit
 neptune
 matplotlib==3.4.3
-
+email_validator
 

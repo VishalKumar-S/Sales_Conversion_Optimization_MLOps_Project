@@ -8,7 +8,7 @@ from steps.train_model import train_model
 from evidently.test_suite import TestSuite
 from evidently.tests import *
 from evidently.test_preset import DataDriftTestPreset
-from steps.email_report import email_report
+from steps.alert_report import alert_report
 from sklearn.model_selection import train_test_split
 from neptune.types import File
 import neptune
@@ -26,7 +26,7 @@ class DataCleaner:
 
 class DataDriftValidator:
     @staticmethod
-    def validate(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame)-> Tuple[pd.DataFrame, pd.DataFrame]:
+    def validate(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame, user_email: str)-> Tuple[pd.DataFrame, pd.DataFrame]:
         test_suite = TestSuite(tests=[DataDriftTestPreset(),])
         test_suite.run(reference_data=reference_dataset, current_data=current_dataset)
         threshold = test_suite.as_dict()['summary']['success_tests'] / test_suite.as_dict()['summary']['total_tests']
@@ -43,9 +43,9 @@ class DataDriftValidator:
             # Initialize a run
             neptune_run = get_neptune_run()
 
-            test_suite.save_html("Reports/data_drift_suite.html")
-            neptune_run["html/Data Drift Test"].upload("Reports/data_drift_suite.html")
-            email_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Reports/data_drift_suite.html")
+            test_suite.save_html("Evidently_Reports/data_drift_suite.html")
+            neptune_run["html/Data Drift Test"].upload("Evidently_Reports/data_drift_suite.html")
+            alert_report(passed_tests, failed_tests, total_tests, "Data Drift Test", "Evidently_Reports/data_drift_suite.html", user_email)
         else:
             logging.info(f"All Data Drift checks passed")
             return reference_dataset, current_dataset
@@ -62,9 +62,9 @@ def clean_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
         raise e
 
 @step(enable_cache=False)
-def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def data_drift_validation(reference_dataset: pd.DataFrame, current_dataset: pd.DataFrame, user_email: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
-        reference_dataset, current_dataset = DataDriftValidator.validate(reference_dataset, current_dataset)
+        reference_dataset, current_dataset = DataDriftValidator.validate(reference_dataset, current_dataset, user_email)
         return reference_dataset, current_dataset
     except Exception as e:
         logging.error(e)

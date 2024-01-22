@@ -2,10 +2,15 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from zenml import step
 import logging
-
 import neptune
 from neptune.types import File
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
+import pandas as pd
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.test_preset import DataQualityTestPreset
+import streamlit as st
 
 class DataReader(ABC):
     @abstractmethod
@@ -68,3 +73,66 @@ def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFr
     except Exception as e:
         logging.error(e)
         raise e
+
+
+
+@step(enable_cache=False)
+def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
+    """ZenML Step: Validates data quality and triggers email on failure"""
+    test_suite = TestSuite(tests=[DataQualityTestPreset()])
+    test_suite.run(reference_data= ref_data, current_data=curr_data)
+    
+    summary = test_suite.as_dict()['summary']
+    passed_tests = summary['success_tests']
+    failed_tests = summary['failed_tests']
+    total_tests = summary['total_tests']
+    logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted in Data Quality.")
+    st.write(f"Number of passed tests: {passed_tests} ✅, "
+             f"Number of failed tests: {failed_tests} ❌, "
+             f"Out of {total_tests} tests conducted in Data Quality.")
+        
+    threshold = passed_tests / total_tests if total_tests > 0 else 0
+
+    if threshold < 0.85:
+
+        # Initialize a run
+        neptune_run = get_neptune_run()
+
+        test_suite.save_html("Evidently_Reports/data_quality_suite.html")
+
+        neptune_run["html/Data Quality Test"].upload("Evidently_Reports/data_quality_suite.html")
+        
+        alert_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Evidently_Reports/data_quality_suite.html", user_email)
+    else:
+        return curr_data
+
+
+@step(enable_cache=False)
+def data_stability_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
+    """ZenML Step: Validates data quality and triggers email on failure"""
+    test_suite = TestSuite(tests=[DataStabilityTestPreset()])
+    test_suite.run(reference_data= ref_data, current_data=curr_data)
+    
+    summary = test_suite.as_dict()['summary']
+    passed_tests = summary['success_tests']
+    failed_tests = summary['failed_tests']
+    total_tests = summary['total_tests']
+    logging.info(f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, out of {total_tests} tests conducted in Data Stability.")
+    st.write(f"Number of passed tests: {passed_tests} ✅, "
+             f"Number of failed tests: {failed_tests} ❌, "
+             f"Out of {total_tests} tests conducted in Data Stability.")
+        
+    threshold = passed_tests / total_tests if total_tests > 0 else 0
+
+    if threshold < 0.85:
+
+        # Initialize a run
+        neptune_run = get_neptune_run()
+
+        test_suite.save_html("Evidently_Reports/data_stability_suite.html")
+
+        neptune_run["html/Data Stability Test"].upload("Evidently_Reports/data_stability_suite.html")
+        
+        alert_report(passed_tests, failed_tests, total_tests, "Data Stability Test", "Evidently_Reports/data_stability_suite.html", user_email)
+    else:
+        return curr_data

@@ -52,7 +52,7 @@ class PredictionFacade:
 def predict_prod_data(ref_data: pd.DataFrame, curr_data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
         PredictionFacade.init_h2o()
-        model_path = "models/best_model.zip/GLM_1_AutoML_1_20231214_194418.zip"
+        model_path = "models/best_model.zip/StackedEnsemble_BestOfFamily_1_AutoML_1_20240122_204822.zip"
         trained_model = PredictionFacade.load_trained_model(model_path)
 
         ref_data['prediction'] = PredictionFacade.make_predictions(ref_data, trained_model)

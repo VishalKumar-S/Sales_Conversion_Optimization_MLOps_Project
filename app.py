@@ -20,11 +20,12 @@ from email_validator import validate_email, EmailNotValidError
 
 
 
+
 # Initialize H2O
 h2o.init()
 
 # Load trained H2O AutoML model
-model_path = "models/best_model.zip/GLM_1_AutoML_1_20231214_194418.zip"
+model_path = "models/best_model.zip/StackedEnsemble_BestOfFamily_1_AutoML_1_20240122_204822.zip"
 best_tree_model_path = "models/best_tree_model.zip/GBM_2_AutoML_5_20240118_62124.zip"
 
 model = h2o.import_mojo(model_path)
@@ -165,7 +166,7 @@ elif app_selector == "Data and Model Reports":
 
 
         st.subheader("Select Reports to Generate")
-        generate_data_quality = st.checkbox("Generate Data Quality Report")
+        generate_data_quality = st.checkbox("Generate Data Quality Report")        
         generate_data_drift = st.checkbox("Generate Data Drift Report")
         generate_target_drift = st.checkbox("Generate Target Drift Report")
         generate_model_report = st.checkbox("Generate Model Performance Report")
@@ -224,7 +225,6 @@ elif app_selector == "Data and Model Reports":
                 st.session_state.button_2_Clicked = False
                 st.write("### Data Quality Report")
                 st.write("Generating Data Quality Report...")
-                #st.write("Generating the Data Quality Report will take more time, around 10 minutes, due to its thorough analysis. You can either wait or explore other reports if you're short on time.")
                 data_quality_report = Report(metrics=[DataQualityPreset()])
                 data_quality_report.run(
                     reference_data=reference_raw_data,
@@ -234,6 +234,7 @@ elif app_selector == "Data and Model Reports":
                 
                 display_report(data_quality_report, "Data Quality Report")
             
+       
 
 
 
@@ -340,7 +341,7 @@ elif app_selector == "Data and Model Reports":
 elif app_selector == "Test Your Batch Data":
     st.title("Batch Data Validation")
     st.write("Welcome to the Batch Data Validation section. We'll assess the quality and integrity of your dataset "
-             "through a comprehensive set of 34 validation tests. Please follow the steps below:")
+             "through a comprehensive set of 67 validation tests. Please follow the steps below:")
 
     # Step 1: Dataset Upload
     st.subheader("Step 1: Upload Your Batch Dataset")
@@ -391,7 +392,7 @@ elif app_selector == "Test Your Batch Data":
 
         # Step 2: Data Validation Progress
         st.subheader("Step 3: Data Validation Progress")
-        st.write("The dataset is undergoing 34 validation tests to ensure its quality and adherence to expected standards. "
+        st.write("The dataset is undergoing 67 validation tests to ensure its quality and adherence to expected standards. "
                  "Please wait while the validation process is in progress.....")
 
         # Run the validation tests

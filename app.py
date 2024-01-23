@@ -31,6 +31,8 @@ best_tree_model_path = "models/best_tree_model.zip/GBM_2_AutoML_5_20240118_62124
 model = h2o.import_mojo(model_path)
 best_tree_model = h2o.import_mojo(best_tree_model_path)
 
+
+
 # Sidebar to switch between Prediction App and Interpretability
 app_selector = st.sidebar.radio("Select App", ("Prediction App", "Interpretability", "Data and Model Reports", "Test Your Batch Data"))
 input_data_file = "data/input_data.csv"

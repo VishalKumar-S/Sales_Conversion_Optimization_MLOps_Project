@@ -11,6 +11,7 @@ from evidently.tests import *
 from evidently.test_preset import DataStabilityTestPreset
 from evidently.test_preset import DataQualityTestPreset
 import streamlit as st
+from steps.alert_report import alert_report
 
 class DataReader(ABC):
     @abstractmethod

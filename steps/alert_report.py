@@ -31,6 +31,7 @@ class NotificationSender:
 
 
     def send_slack_notification(self):
+        print(self.slack_token)
         client = WebClient(token=self.slack_token)
         subject = "Test failed"
         try:
@@ -94,11 +95,12 @@ class NotificationSender:
 
         response = requests.post(webhook_url, data={"content": message}, files={"file": file})
 
-        if response.status_code == 204:
+        if response.ok:
             logging.info("Discord Notification sent successfully!")
         else:
-            logging.info("Error:", response.text)
-
+            st.write("❌ Failed to send Discord notification.")
+            logging.info("Error:", response.status_code)
+            logging.error("Error: " + str(response.text))
 
 @step(enable_cache=False)
 def alert_report(passed_tests, failed_tests, total_tests, test_name, path, user_email="vishalkumar.s2022ai-ds@sece.ac.in"):
@@ -108,6 +110,7 @@ def alert_report(passed_tests, failed_tests, total_tests, test_name, path, user_
     webhook_url = os.environ.get('DISCORD_WEBHOOK')
     slack_token = os.environ.get('SLACK_API_TOKEN')
     slack_channel = 'C06ER9KNYUD'
+    print(slack_token)
 
 
     body = f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, total out of {total_tests} tests conducted in {test_name}."

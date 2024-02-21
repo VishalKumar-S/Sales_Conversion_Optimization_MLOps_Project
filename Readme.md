@@ -171,13 +171,46 @@ To run the streamlit application,
     ```
 ![Streamlit Prediction App](assets/streamlit-prediction-app.PNG)
 
-### Functionality:
-- **Streamlit Application**: Utilizes Streamlit to create a user-friendly interface.
-- **User Input Fields**: Allows users to input various parameters for prediction.
-- **Prediction**: Generates predictions based on the provided inputs.
-- **Redirect to Neptune.ai**: Offers a direct link to explore model metrics on Neptune.ai.
+## Functionality:
+- 🌐 **Streamlit Application**: User-friendly interface for predictions and monitoring.
+- 🚀 **Prediction App**: Input parameters for prediction with a link to Neptune.ai for detailed metrics.
+- 📊 **Interpretability Section**: Explore detailed interpretability plots, including SHAP global and local plots.
+- 📈 **Data and Model Reports**: View reports on data quality, data drift, target drift, and model performance.
+- 🛠️ **Test Your Batch Data Section**: Evaluate batch data quality with 67 validation tests, receive alerts on failures.
 
-This application provides an intuitive interface for users to make predictions and explore model metrics effortlessly. 📊✨
+This app streamlines the process of making predictions, interpreting model outputs, monitoring data, and validating batch data.
+
+## Prediction App 🚀
+### User Input Data
+- Fields: Impressions, Clicks, Spent, Total_Conversion, CPC.
+- Predict button generates approved conversion predictions.
+- 🔗 [Neptune.ai Metrics](https://app.neptune.ai/Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project)
+
+## Interpretability Section
+- 📝 **Detailed Interpretability Report**: View global interpretability metrics.
+- 🌐 **SHAP Global Plot**: Explore SHAP values at a global level.
+- 🌍 **SHAP Local Plot**: Visualize SHAP values for user-input data.
+
+## Data and Model Reports
+- 📉 **Data Quality Report**: Assess data quality between reference and current data.
+- 📊 **Data Drift Report**: Identify drift in data distribution.
+- 📈 **Target Drift Report**: Monitor changes in target variable distribution.
+- 📉 **Model Performance Report**: Evaluate the model's performance.
+
+### Choose Reports
+- Check options to generate specific reports.
+- Click 'Submit' to view generated reports.
+
+## Test Your Batch Data
+1. 📂 **Dataset Upload**: Upload your batch dataset for validation.
+2. 📧 **Email Alerts**: Provide an email for failure alerts.
+3. 🔄 **Data Validation Progress**: 67 tests to ensure data quality.
+4. 📊 **Visualizations**: Scatter plot and residuals plot for validation results.
+
+For more details, check the respective sections in the Streamlit app.
+
+This application provides an intuitive interface for users to make predictions and monitoring effortlessly. 📊✨ Explore the power of data-driven insights with ease and confidence! 🚀🔍
+
 
 # Neptune.ai Dashboard 🌊
 
@@ -299,7 +332,6 @@ Follow these steps to run different components of the project:
    ```bash
     python run_pipeline.py
     ```
-
 2. **Continuous Integration Pipeline**:
    - To execute the CI/CD pipeline for continuous integration, run
    ```bash

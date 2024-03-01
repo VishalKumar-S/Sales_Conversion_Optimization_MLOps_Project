@@ -1,0 +1,24 @@
+diff --git a/.zen/config.yaml b/.zen/config.yaml
+deleted file mode 100644
+index 11a4a59..0000000
+--- a/.zen/config.yaml
++++ /dev/null
+@@ -1,2 +0,0 @@
+-active_stack_id: 14b8cb56-c870-4c6c-aefe-75558f4dfd4d
+-active_workspace_id: 490cb427-ea37-47d4-a2fb-49c16da9f4a7
+diff --git a/Readme.md b/Readme.md
+index 86af46f..d02e6e7 100755
+--- a/Readme.md
++++ b/Readme.md
+@@ -162,6 +162,8 @@ This notification system helps ensure the integrity and reliability of the data
+ ![Model Performance e-mail report](assets/model_performace_email.PNG)
+ 
+ 
++
++
+ # Prediction App 🚀
+ 
+ The Prediction App is the user-facing interface that leverages the trained models to make predictions based on user input. 🎯
+diff --git a/steps/__pycache__/production_batch_data.cpython-310.pyc b/steps/__pycache__/production_batch_data.cpython-310.pyc
+index 34e8d65..b8aa248 100644
+Binary files a/steps/__pycache__/production_batch_data.cpython-310.pyc and b/steps/__pycache__/production_batch_data.cpython-310.pyc differ

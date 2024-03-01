@@ -7,7 +7,7 @@
 3. [Necessary Installations](#necessary-installations) 🛠️
 4. [Train Pipeline](#train-pipeline) 🚂
 5. [Continuous Integration Pipeline](#continuous-integration-pipeline) 🔁
-6. [Email Report](#email-report) 📧
+6. [Alert Reports](#email-report) 📧
 7. [Prediction App](#prediction-app) 🎯
 8. [Neptune.ai Dashboard](#neptune.ai-dashboard) 🌊
 9. [Docker Configuration](#docker-configuration) 🐳
@@ -138,7 +138,7 @@ This pipeline is crucial for maintaining a continuous and reliable deployment pr
 
 
 
-## Email Reports 📧
+## Alert Reports 📧
 
 In our project, email reports are a vital part of the pipeline to notify users when certain tests fail. These reports are triggered by specific conditions during the pipeline execution. Here's how it works:
 
@@ -161,6 +161,16 @@ This notification system helps ensure the integrity and reliability of the data 
 ![Data Drift e-mail report](assets/data_Drift_email.PNG)
 ![Model Performance e-mail report](assets/model_performace_email.PNG)
 
+We also send failed alert reports via Discord and Slack platforms.
+
+Discord: [#failed-alerts](https://discord.gg/bxZx6EGVMD)
+
+![Discord Alert:](assets/alerts-discord.PNG)
+
+Slack: [#sales-conversion-test-failures](https://join.slack.com/t/vishalsworkspaceco/shared_invite/zt-2b00eaite-KHPsBmlsM2JtsmR2oN0qrQ)
+
+![Slack Alert:](assets/slack-alerter.PNG)
+
 
 # Prediction App 🚀
 
@@ -169,7 +179,6 @@ To run the streamlit application,
     ```bash
     streamlit run app.py
     ```
-![Streamlit Prediction App](assets/streamlit-prediction-app.PNG)
 
 ## Functionality:
 - 🌐 **Streamlit Application**: User-friendly interface for predictions and monitoring.
@@ -186,10 +195,18 @@ This app streamlines the process of making predictions, interpreting model outpu
 - Predict button generates approved conversion predictions.
 - 🔗 [Neptune.ai Metrics](https://app.neptune.ai/Vishal-Kumar-S/Sales-Conversion-Optimisation-MLOps-Project)
 
+![Streamlit Prediction App](assets/streamlit-prediction-app.PNG)
+
+
 ## Interpretability Section
 - 📝 **Detailed Interpretability Report**: View global interpretability metrics.
 - 🌐 **SHAP Global Plot**: Explore SHAP values at a global level.
 - 🌍 **SHAP Local Plot**: Visualize SHAP values for user-input data.
+
+![SHAP Report:](assets/shap_local_plot.PNG)
+
+![LIME Report:](assets/local_plot.PNG)
+
 
 ## Data and Model Reports
 - 📉 **Data Quality Report**: Assess data quality between reference and current data.
@@ -201,11 +218,45 @@ This app streamlines the process of making predictions, interpreting model outpu
 - Check options to generate specific reports.
 - Click 'Submit' to view generated reports.
 
+![Data Quality Report:](assets/data_quality_report_2(2).PNG
+)
+
+![](assets/data_quality_report_2(1).PNG)
+
+
+
 ## Test Your Batch Data
 1. 📂 **Dataset Upload**: Upload your batch dataset for validation.
 2. 📧 **Email Alerts**: Provide an email for failure alerts.
 3. 🔄 **Data Validation Progress**: 67 tests to ensure data quality.
 4. 📊 **Visualizations**: Scatter plot and residuals plot for validation results.
+
+
+##### Step 1: Upload Your Batch Dataset
+
+![Upload Batch Data](assets/test_batch_Data.PNG)
+  
+![](assets/test_batch_Data_1.PNG)
+
+##### Step 2: Provide Email Address for Alerts
+
+![E-mail address](assets/test_batch_Data_2.PNG)
+
+##### Step 3: Data Validation Progress
+
+Successful tests validation: 
+
+![Successful tests validation: ](assets/STEP_3_DATA_VALDIATION_PROGRESS.PNG)
+
+![](assets/STEP_3_VISUALSATIONS.PNG)
+
+![](assets/STEP_3_VISUALISATIONS_2.PNG)
+
+
+Failed tests validation:
+![Failed tests validation:](assets/failed_Tests_valdiation.PNG)
+
+
 
 For more details, check the respective sections in the Streamlit app.
 

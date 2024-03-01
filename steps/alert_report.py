@@ -97,6 +97,7 @@ class NotificationSender:
 
         if response.ok:
             logging.info("Discord Notification sent successfully!")
+            st.write("Discord Notification sent successfully!")
         else:
             st.write("❌ Failed to send Discord notification.")
             logging.info("Error:", response.status_code)

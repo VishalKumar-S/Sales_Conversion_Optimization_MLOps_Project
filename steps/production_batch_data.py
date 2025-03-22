@@ -12,17 +12,12 @@ from evidently.test_preset import DataStabilityTestPreset
 from evidently.test_preset import DataQualityTestPreset
 import streamlit as st
 from steps.alert_report import alert_report
+import sys
 
-class DataReader(ABC):
-    @abstractmethod
-    def read_data(self, data_path: str) -> pd.DataFrame:
-        pass
-
-
-class CSVDataReader(DataReader):
-    def read_data(self, data_path: str) -> pd.DataFrame:
+class DataReader:
+    @staticmethod
+    def read_data(data_path: str) -> pd.DataFrame:
         try:
-            # Initialize a run
             neptune_run = get_neptune_run()
             df = pd.read_csv(data_path)
             neptune_run["data/Prod_batch_data"].upload(File.as_html(df))
@@ -33,41 +28,11 @@ class CSVDataReader(DataReader):
             raise e
 
 
-class JSONDataReader(DataReader):
-    def read_data(self, data_path: str) -> pd.DataFrame:
-        try:
-            # Logic to read JSON files
-            # df = pd.read_json(data_path)
-            logging.info("Read JSON file completed.")
-            # return df
-        except Exception as e:
-            logging.error(e)
-            raise e
-
-
-class DataReaderFactory:
-    def create_data_reader(self, data_format: str) -> DataReader:
-        if data_format.lower() == 'csv':
-            return CSVDataReader()
-        elif data_format.lower() == 'json':
-            return JSONDataReader()
-        else:
-            raise ValueError(f"Unsupported data format: {data_format}")
-
 
 @step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
-def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFrame:
-    """
-    Args:
-        data_path (str): Path to the data file.
-        data_format (str): Format of the data file (default: 'csv').
-    Returns:
-        df (pd.DataFrame): Processed DataFrame.
-    """
+def production_batch_data(data_path: str) -> pd.DataFrame:
     try:
-        factory = DataReaderFactory()
-        reader = factory.create_data_reader(data_format)
-        return reader.read_data(data_path)
+        return DataReader.read_data(data_path)
     except ValueError as ve:
         logging.error(ve)
         raise ve
@@ -77,9 +42,10 @@ def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFr
 
 
 
-@step(enable_cache=True)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
-    """ZenML Step: Validates data quality and triggers email on failure"""
+    """ZenML Step: Validates data quality and triggers email on failure.
+    Data quality focus on validating the intrinsic properties of the current batch of data i.e missing values, outliers, anamolies, data type consistency, duplicate records, Business rule violations, Format validation (dates, emails, phone numbers)"""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])
     test_suite.run(reference_data= ref_data, current_data=curr_data)
     
@@ -96,6 +62,7 @@ def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, use
 
     if threshold < 0.85:
 
+        logging.error("Data quality tests got failed. Logging failed reports and sending alerts...")
         # Initialize a run
         neptune_run = get_neptune_run()
 
@@ -104,13 +71,16 @@ def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, use
         neptune_run["html/Data Quality Test"].upload("Evidently_Reports/data_quality_suite.html")
         
         alert_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Evidently_Reports/data_quality_suite.html", user_email)
+        sys.exit("Data quality threshold failed on production data. Pipeline terminated.")
     else:
         return curr_data
 
 
-@step(enable_cache=True)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def data_stability_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
-    """ZenML Step: Validates data quality and triggers email on failure"""
+    """ZenML Step: Validates data stability and triggers email on failure.
+    Data stability measures how data characteristics and distributions change over time by comparing the current dataset against historical reference data through tests for distribution shifts, statistical property changes, and feature correlation variations."""
+    
     test_suite = TestSuite(tests=[DataStabilityTestPreset()])
     test_suite.run(reference_data= ref_data, current_data=curr_data)
     
@@ -126,8 +96,8 @@ def data_stability_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, u
     threshold = passed_tests / total_tests if total_tests > 0 else 0
 
     if threshold < 0.85:
-
-        # Initialize a run
+        
+        logging.error("Data stability tests got failed. Logging failed reports and sending alerts...")
         neptune_run = get_neptune_run()
 
         test_suite.save_html("Evidently_Reports/data_stability_suite.html")
@@ -135,5 +105,7 @@ def data_stability_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, u
         neptune_run["html/Data Stability Test"].upload("Evidently_Reports/data_stability_suite.html")
         
         alert_report(passed_tests, failed_tests, total_tests, "Data Stability Test", "Evidently_Reports/data_stability_suite.html", user_email)
+        sys.exit("Data stability threshold failed. Pipeline terminated.")
+
     else:
         return curr_data

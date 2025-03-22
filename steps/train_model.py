@@ -13,17 +13,17 @@ import neptune
 import streamlit as st
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 from src.train_models import train_h2o_automl
-
+import sys
 
 @step(experiment_tracker="neptune_experiment_tracker", enable_cache=True)
 def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    # Initialize a run
+
     neptune_run = get_neptune_run()
 
-    # Your existing train_h2o_automl logic here
+
     train_df, test_df = train_h2o_automl(cleaned_dataset)
 
-    # Log parameters to Neptune
+    # Log H2o parameters to Neptune
     params = {
         "max_models": 20,
         "seed": 42,
@@ -34,6 +34,7 @@ def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFra
 
 @step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame, user_email: str):
+
     column_mapping = ColumnMapping()
     column_mapping.target = 'Approved_Conversion'
     column_mapping.prediction = 'prediction'
@@ -51,11 +52,13 @@ def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame, 
 
     if threshold < 0.65:
 
-        # Initialize a run
+        logging.error("Model performance tests got failed. Logging failed reports and sending alerts...")
+        # Initialize a neptune run
         neptune_run = get_neptune_run()
 
         test_suite.save_html("Evidently_Reports/model_performance_suite.html")
         neptune_run["html/Model Performance"].upload("Evidently_Reports/model_performance_suite.html")
         alert_report(passed_tests, failed_tests, total_tests, test_name, "Evidently_Reports/model_performance_suite.html", user_email)
+        sys.exit("Model performance threshold failed. Pipeline terminated.")
     else:
         logging.info(f"All Model Performance checks passed")

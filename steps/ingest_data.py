@@ -16,50 +16,19 @@ import logging
 from neptune.types import File
 from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune_run
 import streamlit as st
-
-class DataFetcher:
-    """Class to fetch data from a specified URL."""
-
-    def __init__(self, url: str) -> None:
-        self.url = url
-
-    def fetch_data(self) -> str:
-        """Fetch data from the provided URL."""
-        response = requests.get(self.url)
-        if response.status_code == 200:
-            return response.text
-        return None
-
-    @staticmethod
-    def convert_to_dataframe(data_text: Optional[str]) -> pd.DataFrame:
-        """Convert data text to Pandas DataFrame."""
-        if data_text:
-            # Initialize a run
-            neptune_run = get_neptune_run()
-            df = pd.read_csv(StringIO(data_text))
-            neptune_run["data/Training_data"].upload(File.as_html(df))
-            return df
-        return None
+import os
+import sys
 
 
-class DataIngestor:
-    """Class responsible for data ingestion."""
 
-    @staticmethod
-    def ingest_data(url: str) -> pd.DataFrame:
-        """Ingest data from the provided URL."""
-        fetcher = DataFetcher(url)
-        data_text = fetcher.fetch_data()
-        return fetcher.convert_to_dataframe(data_text)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
+# Note: Here, i enabled caching, since we are retrieving data from a static dataset
+def ingest_data(path: str) -> pd.DataFrame:
+    """ZenML Step: Ingests data from the provided path"""
+    return pd.read_csv(path)
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
-def ingest_data(url: str) -> pd.DataFrame:
-    """ZenML Step: Ingests data from the provided URL"""
-    return DataIngestor.ingest_data(url)
-
-
-@step(enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def data_quality_validation(curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
     """ZenML Step: Validates data quality and triggers email on failure"""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])
@@ -78,6 +47,7 @@ def data_quality_validation(curr_data: pd.DataFrame, user_email: str) -> pd.Data
 
     if threshold < 0.85:
 
+        logging.error("Data quality tests got failed. Logging failed reports and sending alerts...")
         # Initialize a run
         neptune_run = get_neptune_run()
 
@@ -86,5 +56,6 @@ def data_quality_validation(curr_data: pd.DataFrame, user_email: str) -> pd.Data
         neptune_run["html/Data Quality Test"].upload("Evidently_Reports/data_quality_suite.html")
         
         alert_report(passed_tests, failed_tests, total_tests, "Data Quality Test", "Evidently_Reports/data_quality_suite.html", user_email)
+        sys.exit("Data quality threshold failed. Pipeline terminated.")
     else:
         return curr_data

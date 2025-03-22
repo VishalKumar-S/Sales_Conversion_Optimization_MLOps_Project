@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np 
 
 class DataPreprocessor:
     def __init__(self, data):
@@ -20,7 +21,7 @@ class DataPreprocessor:
         return data.drop(columns, axis=1)
 
     def calculate_cpc(self, data):
-        data['CPC'] = data['Spent'] / data['Clicks']
+        data['CPC'] = np.where(data['Clicks']>0, data['Spent'] / data['Clicks'],0)
         return data['CPC']
 
     def impute_missing_values(self, data, columns):

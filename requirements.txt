@@ -1,12 +1,12 @@
 scikit-learn
-numpy<2
+numpy<2.0.0
 pandas
 zenml
 h2o
 evidently
 streamlit
 neptune
-matplotlib==3.4.3
+matplotlib
 email_validator
 discord.py
 slack_sdk

@@ -45,7 +45,7 @@ def data_quality_validation(curr_data: pd.DataFrame, user_email: str) -> pd.Data
         
     threshold = passed_tests / total_tests if total_tests > 0 else 0
 
-    if threshold < 0.85:
+    if threshold > 0.85:
 
         logging.error("Data quality tests got failed. Logging failed reports and sending alerts...")
         # Initialize a run

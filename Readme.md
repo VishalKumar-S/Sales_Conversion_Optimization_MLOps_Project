@@ -1,7 +1,9 @@
 # Sales Conversion Optimization Project 📈
 
-# Table of Contents 📑
+**Deployed Application: [Sales Conversion Optimisation Web App](https://sales-conversion-optimization-mlops-project.streamlit.app/)**
 
+
+# Table of Contents 📑
 
 1. [Project Description](#project-description) 📝
 2. [Project Structure](#project-structure) 🏗️
@@ -24,6 +26,10 @@ Welcome to the Sales Conversion Optimization Project! 📈 This project focuses 
 I've structured this project to streamline the process from data ingestion and cleaning to model training and evaluation. With an aim to empower efficient decision-making, my pipelines include quality validation tests, drift analysis, and rigorous model performance evaluations.
 
 This project aims to streamline your sales conversion process, providing insights and predictions to drive impactful business decisions! 📊✨
+
+**Live Demo Walkthrough**:  
+[![Live Demo Walkthrough](https://img.youtube.com/vi/PfnZFzvqHFs/0.jpg)](https://www.youtube.com/watch?v=PfnZFzvqHFs)
+
 
 <a id="project-structure"></a>
 # Project Structure 🏗️
@@ -134,7 +140,7 @@ Here's how it flows:
 
 1. **ci-cd.py**: Triggered to initiate the CI/CD pipeline.
 2. **steps/production_batch_data**: Accesses production batch data from the Production_data folder
-3. **pipelines/ci_cd_pipeline.py**: As we already discussed earlier, we conduct Data Quality, Data Drift as previously we did, if threshold fails, email reports are sent.
+3. **pipelines/ci_cd_pipeline.py**: As we already discussed earlier, we conduct Data Quality, Data stability tests, Data drift, model performance validation tests as previously we did, if threshold fails, email reports are sent.
 4. **steps/predict_production_Data.py**: Utilizes the pre-trained best model to make predictions on new production data. Then, we conduct Model Performance validation as previously we did, if threshold fails, email reports are sent.
 
 This pipeline is crucial for maintaining a continuous and reliable deployment process. 🔁✨
@@ -208,8 +214,8 @@ This app streamlines the process of making predictions, interpreting model outpu
 
 ## Interpretability Section
 - 📝 **Detailed Interpretability Report**: View global interpretability metrics.
-- 🌐 **SHAP Global Plot**: Explore SHAP values at a global level.
-- 🌍 **SHAP Local Plot**: Visualize SHAP values for user-input data.
+- 🌐 **SHAP Global Plot**: Visualize SHAP values at a global level.
+- 🌍 **SHAP Local Plot**: Visualize SHAP values for the user-input data in the Prediction App.
 
 ![SHAP Report:](assets/shap_local_plot.PNG)
 
@@ -274,8 +280,6 @@ This application provides an intuitive interface for users to make predictions a
 
 <a id="neptune.ai-dashboard"></a>
 # Neptune.ai Dashboard 🌊
-
-## Utilising the Power of Neptune.ai for Enhanced Insights and Management 🚀
 
 Neptune.ai offers an intuitive dashboard for comprehensive tracking and management of experiments, model metrics, and pipeline performance. Let's dive into its features:
 
@@ -364,23 +368,41 @@ Docker is an essential tool for packaging and distributing applications. Here's 
 
 
 <a id="github-actions"></a>
-# GitHub Actions Workflow and Continuous Machine Learning (CML) Reports 📊
+# GitHub Actions and CML Reports 📊
 
-## CML Reports Integration 🚀
+My project integrates GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD), automating testing and deployment processes whenever changes are pushed to the repository.
 
-🎯 Predictions Scatter Plot: Visualizes model predictions against actual conversions.
-📈 Residuals Plot: Illustrates the differences between predicted and actual values.
+## Workflow Overview 🔍
+The CI/CD pipeline automatically runs on every code push, performing the following steps:
 
-## GitHub Actions Workflow 🛠️
+### Environment Setup 🛠️
 
-Integrated into CI/CD pipeline:
-- Automatic generation on every push event.
-- Visual insights available directly in the repository.
+1. Checks out the latest code
+2. Installs all dependencies from requirements.txt
+
+### ZenML Configuration 📊
+
+1. Registers the Neptune experiment tracker
+2. Creates and sets the ZenML stack with Neptune integration
+
+
+### Pipeline Execution 🚀
+
+1. Runs the CI/CD pipeline script with secure environment variables
+2. Handles sensitive information (email password, API tokens) using GitHub Secrets
+
+
+### CML Reporting 📈
+
+1. Generates visual reports using Continuous Machine Learning (CML)
+2. Creates prediction scatter plots (model predictions against actual conversions) and residuals plots (differences between predicted and actual values).
+3. Publishes results as comments directly in GitHub
+
 
 ![Predictions Scatter Plot](CML_Reports/predictions_scatter_plot.png)
 ![Residuals Plot](CML_Reports/residuals_plot.png)
 
-🌟 These reports enhance transparency and provide crucial insights into model performance! 🌟
+🌟 So my CI/CD approach eliminates manual testing and deployment steps and provides visual feedback on model performance and these reports enhance transparency and provide crucial insights into model performance! 🌟
 
 
 <a id="running-the-project"></a>

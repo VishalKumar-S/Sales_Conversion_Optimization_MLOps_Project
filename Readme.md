@@ -2,6 +2,7 @@
 
 # Table of Contents 📑
 
+
 1. [Project Description](#project-description) 📝
 2. [Project Structure](#project-structure) 🏗️
 3. [Necessary Installations](#necessary-installations) 🛠️
@@ -11,19 +12,20 @@
 7. [Prediction App](#prediction-app) 🎯
 8. [Neptune.ai Dashboard](#neptune.ai-dashboard) 🌊
 9. [Docker Configuration](#docker-configuration) 🐳
-10. [GitHub Actions](#github-actions) 🛠️
+10. [GitHub Actions and CML Reports](#github-actions) 🛠️
 11. [Running the Project](#running-the-project) 🚀
 
 
+<a id="project-description"></a>
 # Project Description 🚀
 
-Welcome to the Sales Conversion Optimization Project! 📈 This project focuses on enhancing sales conversion rates through meticulous data handling and efficient model training. The goal is to optimize conversions using a structured pipeline and predictive modeling.
+Welcome to the Sales Conversion Optimization Project! 📈 This project focuses on enhancing sales conversion rates through careful data handling and efficient model training. The goal is to optimize conversions using a structured pipeline and predictive modeling.
 
-We've structured this project to streamline the process from data ingestion and cleaning to model training and evaluation. With an aim to empower efficient decision-making, our pipelines incorporate quality validation tests, drift analysis, and rigorous model performance evaluations.
+I've structured this project to streamline the process from data ingestion and cleaning to model training and evaluation. With an aim to empower efficient decision-making, my pipelines include quality validation tests, drift analysis, and rigorous model performance evaluations.
 
 This project aims to streamline your sales conversion process, providing insights and predictions to drive impactful business decisions! 📊✨
 
-
+<a id="project-structure"></a>
 # Project Structure 🏗️
 
 Let's dive into the project structure! 📁 Here's a breakdown of the directory:
@@ -60,6 +62,7 @@ Let's dive into the project structure! 📁 Here's a breakdown of the directory:
 
 This organized structure ensures a clear separation of concerns and smooth pipeline execution. 🚀
 
+<a id="necessary-installations"></a>
 # Necessary Installations 🛠️
 
 To ensure the smooth functioning of this project, several installations are required:
@@ -81,7 +84,7 @@ To ensure the smooth functioning of this project, several installations are requ
 
     ```bash
     pip install zenml["server"]
-    zenml init      #to initialise the ZeenML repository
+    zenml init      #to initialise the ZenML repository
     zenml up    
     ```
 
@@ -101,25 +104,28 @@ Make sure to install these dependencies to execute the project functionalities s
 ![Neptune.ai integration with ZenML](assets/zenml_dashbaord_stack.PNG)
 
 
+<a id="train-pipeline"></a>
 # Train Pipeline 🚂
 
-In this pipeline, we embark on a journey through various steps to train our models! 🛤️ Here's the process breakdown:
+In this pipeline, it covers various steps involved in the ML lifecycle, ensuring our system is always reliable! 🛤️ 
+Here's the process breakdown:
 
 1. **run_pipeline.py**: Initiates the training pipeline.
 2. **steps/ingest_Data**: Ingests the data, sending it to the data_validation step.
 3. **data_validation step**: Conducts validation tests and transforms values.
-4. **steps/clean_Data**: Carries out data preprocessing logics.
+4. **steps/clean_Data**: Performs out data preprocessing logic.
 5. **data_Drift_validation step**: Conducts data drift tests.
 6. **steps/train_model.py**: Utilizes h2o.ai AUTOML for model selection.
 7. **src/train_models.py**: Implements the best model on the cleaned dataset.
 8. **model_performance_Evaluation.py**: Assesses model performance on a split dataset.
-9. **steps/alert_report.py**: Here, if any of teh validation test suites, didn't meet the threshold condition, email will be sent to the user, along with the failed Evidently.AI generated HTML reports.
+9. **steps/alert_report.py**: Here, if any of the validation test suites, didn't meet the threshold condition, email will be sent to the user, along with the failed Evidently.AI generated HTML reports.
 
 Each step is crucial in refining and validating our model. All aboard the train pipeline! 🌟🚆
 
 ![Training Pipeline](assets/train_pipeline_dashboard.PNG)
 
 
+<a id="continuous-integration-pipeline"></a>
 # Continuous Integration Pipeline ⚙️
 
 The continuous integration pipeline focuses on the production environment and streamlined processes for deployment. 🔄
@@ -137,10 +143,11 @@ This pipeline is crucial for maintaining a continuous and reliable deployment pr
 ![Continuous Integration Pipeline Part-2](assets/18-12-ci-cd(2).PNG)
 
 
-
+<a id="email-report"></a>
 ## Alert Reports 📧
 
-In our project, email reports are a vital part of the pipeline to notify users when certain tests fail. These reports are triggered by specific conditions during the pipeline execution. Here's how it works:
+In my project, email reports are a vital part of the pipeline to notify users when certain tests fail. These reports are triggered by specific conditions during the pipeline execution. Here's how it works:
+
 
 ### E-mail Details
 
@@ -172,9 +179,10 @@ Slack: [#sales-conversion-test-failures](https://join.slack.com/t/vishalsworkspa
 ![Slack Alert:](assets/slack-alerter.PNG)
 
 
+<a id="prediction-app"></a>
 # Prediction App 🚀
 
-The Prediction App is the user-facing interface that leverages the trained models to make predictions based on user input. 🎯
+The Prediction App is the user-facing interface that utilises the trained models to make predictions based on user input. 🎯
 To run the streamlit application,
     ```bash
     streamlit run app.py
@@ -206,6 +214,7 @@ This app streamlines the process of making predictions, interpreting model outpu
 ![SHAP Report:](assets/shap_local_plot.PNG)
 
 ![LIME Report:](assets/local_plot.PNG)
+
 
 
 ## Data and Model Reports
@@ -260,12 +269,13 @@ Failed tests validation:
 
 For more details, check the respective sections in the Streamlit app.
 
-This application provides an intuitive interface for users to make predictions and monitoring effortlessly. 📊✨ Explore the power of data-driven insights with ease and confidence! 🚀🔍
+This application provides an intuitive interface for users to make predictions and monitoring effortlessly. 📊✨ Explore data-driven insights with ease and confidence! 🚀🔍
 
 
+<a id="neptune.ai-dashboard"></a>
 # Neptune.ai Dashboard 🌊
 
-## Leveraging the Power of Neptune.ai for Enhanced Insights and Management 🚀
+## Utilising the Power of Neptune.ai for Enhanced Insights and Management 🚀
 
 Neptune.ai offers an intuitive dashboard for comprehensive tracking and management of experiments, model metrics, and pipeline performance. Let's dive into its features:
 
@@ -338,6 +348,7 @@ Access my Neptune.ai Dashboard [here](https://app.neptune.ai/o/Vishal-Kumar-S/or
 Neptune.ai enhances the project by providing a centralized platform for managing experiments and gaining deep insights into model performance, contributing to informed decision-making. 📊✨
 
 
+<a id="docker-configuration"></a>
 # Docker Configuration 🐳
 
 Docker is an essential tool for packaging and distributing applications. Here's how to set up and use Docker for this project:
@@ -351,11 +362,9 @@ Docker is an essential tool for packaging and distributing applications. Here's 
 
 **Best Practices:** Consider best practices such as data volume management, security, and image optimization.
 
-## GitHub Actions 🛠️
 
-- Configured CI/CD workflow for automated execution
-
-# Continuous Machine Learning (CML) Reports 📊
+<a id="github-actions"></a>
+# GitHub Actions Workflow and Continuous Machine Learning (CML) Reports 📊
 
 ## CML Reports Integration 🚀
 
@@ -374,6 +383,7 @@ Integrated into CI/CD pipeline:
 🌟 These reports enhance transparency and provide crucial insights into model performance! 🌟
 
 
+<a id="running-the-project"></a>
 # Running the Project 🚀
 
 Follow these steps to run different components of the project:

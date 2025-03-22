@@ -55,7 +55,7 @@ class DataReaderFactory:
             raise ValueError(f"Unsupported data format: {data_format}")
 
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFrame:
     """
     Args:
@@ -77,7 +77,7 @@ def production_batch_data(data_path: str, data_format: str = 'csv') -> pd.DataFr
 
 
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
     """ZenML Step: Validates data quality and triggers email on failure"""
     test_suite = TestSuite(tests=[DataQualityTestPreset()])
@@ -108,7 +108,7 @@ def data_quality_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, use
         return curr_data
 
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def data_stability_validation(ref_data: pd.DataFrame, curr_data: pd.DataFrame, user_email: str) -> pd.DataFrame:
     """ZenML Step: Validates data quality and triggers email on failure"""
     test_suite = TestSuite(tests=[DataStabilityTestPreset()])

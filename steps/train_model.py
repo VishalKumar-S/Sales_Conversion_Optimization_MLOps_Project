@@ -15,7 +15,7 @@ from zenml.integrations.neptune.experiment_trackers.run_state import get_neptune
 from src.train_models import train_h2o_automl
 
 
-@step(experiment_tracker="neptune_experiment_tracker", enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker", enable_cache=True)
 def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Initialize a run
     neptune_run = get_neptune_run()
@@ -32,7 +32,7 @@ def train_model(cleaned_dataset: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFra
 
     return train_df, test_df
 
-@step(experiment_tracker="neptune_experiment_tracker",enable_cache=False)
+@step(experiment_tracker="neptune_experiment_tracker",enable_cache=True)
 def model_performance_validation(train_df: pd.DataFrame, test_df: pd.DataFrame, user_email: str):
     column_mapping = ColumnMapping()
     column_mapping.target = 'Approved_Conversion'

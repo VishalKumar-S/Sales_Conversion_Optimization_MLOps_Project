@@ -17,7 +17,7 @@ class ModelFactory:
     def convert_to_h2o(data):
         return h2o.H2OFrame(data)
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def evaluate(result: Dict[str, str]):
     # Unpack the result dictionary
     model_path = result['model_path']

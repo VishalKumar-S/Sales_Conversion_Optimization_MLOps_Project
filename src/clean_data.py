@@ -5,14 +5,12 @@ class DataPreprocessor:
         self.data = data
 
     def clean_data(self)->pd.DataFrame:
-        # Apply cleaning operations to the DataFrame
         self.data = self.drop_rows(self.data, 'Impressions', 2000000)
         self.data = self.drop_rows(self.data, 'Spent', 500)
         self.data = self.drop_columns(self.data, ['ad_id', 'xyz_campaign_id', 'fb_campaign_id', 'gender', 'interest', 'age'])
         self.data['CPC'] = self.calculate_cpc(self.data)
         self.data = self.impute_missing_values(self.data, ['CPC'])
         
-        # Return the cleaned DataFrame
         return self.data
 
     def drop_rows(self, data, column, threshold):

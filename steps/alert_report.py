@@ -31,11 +31,12 @@ class NotificationSender:
 
 
     def send_slack_notification(self):
-        print(self.slack_token)
+        client = WebClient(token=self.slack_token)
+        response = client.auth_test()
         client = WebClient(token=self.slack_token)
         subject = "Test failed"
         try:
-            # Send message to Slack channel using files_upload_v2
+
             response = client.files_upload_v2(
                 channels=self.slack_channel,
                 initial_comment=self.body,
@@ -43,7 +44,6 @@ class NotificationSender:
                 title=self.subject,
             )
 
-            # Check if the file was uploaded successfully
             if response["ok"]:
                 logging.info("Slack notification sent successfully")
                 st.write("Slack notification sent successfully")
@@ -54,6 +54,7 @@ class NotificationSender:
             logging.error(f"Slack API error: {e.response['error']}")
             st.write("❌ Failed to send Slack notification.")
 
+
     def send_email(self):
         message = MIMEMultipart()
         message['From'] = self.sender
@@ -61,7 +62,6 @@ class NotificationSender:
         message['Subject'] = self.subject
 
 
-        
         #Send alerts in Slack
         #slack_alerter_post_step(body+ f"The failed test reports are attached and sent to the {self.receiver} email-id")
 
@@ -103,16 +103,14 @@ class NotificationSender:
             logging.info("Error:", response.status_code)
             logging.error("Error: " + str(response.text))
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def alert_report(passed_tests, failed_tests, total_tests, test_name, path, user_email="vishalkumar.s2022ai-ds@sece.ac.in"):
-    sender = "mlopsproject612@gmail.com"
+    sender = "app.technicalteam@gmail.com"
     password = os.environ.get('EMAIL_PASSWORD')
     subject = "Threshold Condition Failed"
     webhook_url = os.environ.get('DISCORD_WEBHOOK')
     slack_token = os.environ.get('SLACK_API_TOKEN')
     slack_channel = 'C06ER9KNYUD'
-    print(slack_token)
-
 
     body = f"Number of passed tests are {passed_tests}, number of failed tests are {failed_tests}, total out of {total_tests} tests conducted in {test_name}."
 

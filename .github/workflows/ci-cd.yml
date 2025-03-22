@@ -20,7 +20,9 @@ jobs:
         uses: iterative/setup-cml@v2
 
       - name: Register ZenML Experiment Tracker
-        run: zenml experiment-tracker register neptune_experiment_tracker --flavor=neptune --project="Sales-Conversion-Optimisation-MLOps-Project" --api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI5Mjg3OTM1OS01MjI2LTQzY2ItOTIzMi02YjIyMGMwZTUzMjkifQ=="
+        env:
+          NEPTUNE_API_TOKEN: ${{ secrets.NEPTUNE_API_TOKEN }} 
+        run: zenml experiment-tracker register neptune_experiment_tracker --flavor=neptune --project="Sales-Conversion-Optimisation-MLOps-Project" --api_token=${{ env.NEPTUNE_API_TOKEN }} 
 
       - name: Register ZenML Stack
         run: zenml stack register neptune -a default -o default -e neptune_experiment_tracker --set
@@ -30,8 +32,8 @@ jobs:
 
       - name: Run CI/CD script with Secrets
         env:
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}  # Accessing the secret
-          API_TOKEN: ${{ secrets.API_TOKEN }}  # Accessing the API token secret
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }} 
+          API_TOKEN: ${{ secrets.API_TOKEN }}  
         run: python run_ci_cd.py
 
       - name: CML Report

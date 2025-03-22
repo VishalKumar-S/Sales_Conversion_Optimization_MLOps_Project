@@ -103,7 +103,7 @@ elif app_selector == "Interpretability":
     if st.sidebar.button('SHAP Global Plot'):
 
         shap_global_plot_path = "Interpretability_reports/Shap_interpretability.png"
-        st.image(shap_global_plot_path, use_column_width=True)
+        st.image(shap_global_plot_path, use_container_width=True)
 
 
     # SHAP Local Plot
@@ -396,10 +396,10 @@ elif app_selector == "Test Your Batch Data":
         
         # Prediction vs Actual Scatter Plot
         predictions_scatter_plot_path = "CML_Reports/predictions_scatter_plot.png"
-        st.image(predictions_scatter_plot_path, caption="Predictions vs Actuals", use_column_width=True)
+        st.image(predictions_scatter_plot_path, caption="Predictions vs Actuals", use_container_width=True)
 
         # Residuals Plot
         residuals_plot_path = "CML_Reports/residuals_plot.png"
-        st.image(residuals_plot_path, caption="Residuals Plot", use_column_width=True)
+        st.image(residuals_plot_path, caption="Residuals Plot", use_container_width=True)
 
 
